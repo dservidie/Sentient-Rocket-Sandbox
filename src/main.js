@@ -6,7 +6,7 @@ var generationP, lifeP, statusP, logP;
 var FPS = 0,
   generationCounter = 1;
 
-var rocket = new Rocket();
+var rocket;
 
 function setup() {
   console.log('SETUP START');
@@ -19,6 +19,8 @@ function setup() {
   Stage.addBarrier({ rx: 0, ry: 140, rw: 150, rh: 12 });
   Stage.addBarrier({ rx: 450, ry: 140, rw: 150, rh: 12 });
   createUI();
+
+  rocket = new Rocket();
 }
 
 function draw() {
@@ -31,18 +33,18 @@ function draw() {
     rocket.draw();
   }
 
-  let simulationFinished = Population.simulationFinished();
+  //let simulationFinished = Population.simulationFinished();
   // Displays count to window
   if (skipFrames(15)) {
     generationP.html('Generation #' + generationCounter);
     lifeP.html('Frame: ' + FPS);
-    statusP.html(
-      'Success: &emsp; Failed: ' +
-        '<br/><br/>&emsp;&emsp;' +
-        Population.successCounter +
-        ' &emsp;&emsp;&emsp;&emsp;' +
-        Population.failedCounter
-    );
+    // statusP.html(
+    //   'Success: &emsp; Failed: ' +
+    //     '<br/><br/>&emsp;&emsp;' +
+    //     Population.successCounter +
+    //     ' &emsp;&emsp;&emsp;&emsp;' +
+    //     Population.failedCounter
+    // );
   }
 
   FPS++;
@@ -50,17 +52,17 @@ function draw() {
   // Renders barrier for rockets
   Stage.draw();
 
-  if (simulationFinished && !paused) {
-    paused = true;
-    // gives some time for human read
-    setTimeout(() => {
-      Population.evaluate();
-      Population.selection();
-      FPS = 0;
-      generationCounter++;
-      paused = false;
-    }, 1500);
-  }
+  // if (simulationFinished && !paused) {
+  //   paused = true;
+  //   // gives some time for human read
+  //   setTimeout(() => {
+  //     Population.evaluate();
+  //     Population.selection();
+  //     FPS = 0;
+  //     generationCounter++;
+  //     paused = false;
+  //   }, 1500);
+  // }
 }
 
 function resetSimulation() {
