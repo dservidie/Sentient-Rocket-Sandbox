@@ -47,14 +47,14 @@ class Rocket {
         this.flying = false;
         this.pos = Stage.target.copy();
         this.finalTargetDistance = d;
-        Population.increaseSuccessCounter();
+        // Population.increaseSuccessCounter();
       }
       // Rocket hit the barrier
       if (Stage.rocketCollision(this)) {
         this.crashed = true;
         this.flying = false;
         this.finalTargetDistance = d;
-        Population.increaseFailedCounter();
+        // Population.increaseFailedCounter();
       }
       // After the configured ammount of frames, gets the next command
       if (this.maneuverTimeout <= 0) {
@@ -124,7 +124,7 @@ class Rocket {
     // let nextCommand = this.dna.genes[this.command];
     // this.command++;
     // return nextCommand;
-    return () => {};
+    return Rocket.createCommand(0.2, 0, 10);
   }
 
   static createCommand(thrust, steering, duration) {

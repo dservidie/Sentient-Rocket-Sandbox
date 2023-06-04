@@ -25,7 +25,6 @@ function setup() {
 
 function draw() {
   background(0);
-  console.log('START');
   // Population.run();
   if (FPS / 5 > rocket.launchSecuence) {
     rocket.update();
@@ -67,7 +66,7 @@ function draw() {
 
 function resetSimulation() {
   Rocket.launchSecuenceCounter = 0;
-  Population.initialize();
+  //  Population.initialize();
 }
 
 function createUI() {
