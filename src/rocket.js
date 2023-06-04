@@ -6,7 +6,7 @@ class Rocket {
     let dna = args[0];
     // Physics of rocket at current instance
     this.tiltAcc = 0; // Rotation aceleration
-    this.rotation = p5.Vector.fromAngle(-HALF_PI, 0);
+    this.rotation = p5.Vector.fromAngle(-radians(90));
     this.pos = createVector(width / 2, height - 15);
     this.vel = createVector(0, 0);
     this.acc = createVector(0, 0);

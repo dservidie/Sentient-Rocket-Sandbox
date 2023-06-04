@@ -10,7 +10,7 @@ class Stage {
   static addBarrier(barrier) {
     Stage.objects.push(barrier);
   }
-  
+
   static rocketCollision(rocket) {
     // Rocket hits border of canvas
     if (
