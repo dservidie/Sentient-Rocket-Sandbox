@@ -1,46 +1,48 @@
-* {
-  box-sizing: border-box;
-}
-
 body {
-  margin: 0;
-  font-family: system-ui, sans-serif;
-  color: black;
-  background-color: white;
+  color: white;  
+  font-family: "Lucida Console", Monaco, monospace;
+	font-size: 75%;
+	background: #111;
 }
 
-nav {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  padding: 0.5rem;
-  gap: 0.5rem;
-  border-bottom: solid 1px #aaa;
-  background-color: #eee;
+div, span {
+	background: #111;
+	vertical-align: top;
+	line-height: 0.8;
+}
+h1,h2,h3,h4 {
+		margin-left: -10px;
+		margin-top: 20px;
+}
+#container {
+  width: 100%;
 }
 
-nav a {
-  display: inline-block;
-  min-width: 9rem;
-  padding: 0.5rem;
-  border-radius: 0.2rem;
-  border: solid 1px #aaa;
-  text-align: center;
-  text-decoration: none;
-  color: #555;
+#canvasDiv {
+  width: 620px;
+  float: left;
 }
 
-nav a[aria-current='page'] {
-  color: #000;
-  background-color: #d4d4d4;
+#outDiv {
+  margin-left: 620px;
+  padding: 10px;
 }
 
-main {
-  padding: 1rem;
+.fifty {
+	width: 45%;
+	display: inline-block;
+	vertical-align: top;
 }
 
-h1 {
-  font-weight: bold;
-  font-size: 1.5rem;
+.range-wrap {
+  position: relative;
+	margin-bottom: 25px;
+}
+.bubble {
+  color: white;
+  padding: 4px 4px 2px 4px;
+  position: absolute;
+  border-radius: 4px;
+	border: 1px solid #FFF;
+  top: 20px;
 }
