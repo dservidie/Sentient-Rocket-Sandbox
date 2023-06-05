@@ -4,6 +4,9 @@ class Rocket {
 
   constructor(...args) {
     let dna = args[0];
+ 
+    this.noseColor = 'red';
+
     // Physics of rocket at current instance
     this.tiltAcc = 0; // Rotation aceleration
     this.rotation = p5.Vector.fromAngle(-radians(90));
@@ -56,6 +59,9 @@ class Rocket {
         this.finalTargetDistance = d;
         // Population.increaseFailedCounter();
       }
+
+      this.getSensorsOutput();
+
       // After the configured ammount of frames, gets the next command
       if (this.maneuverTimeout <= 0) {
         // The command finished, need to load the next one.
@@ -127,6 +133,21 @@ class Rocket {
     return Rocket.createCommand(0.2, 0, 10);
   }
 
+
+  getSensorsOutput() {
+
+    line(mouseX, mouseY, 350, 50);
+
+    let hit = collideLineRect(mouseX, mouseY, 350, 50, 200, 300, 100, 150, true);
+   
+    if(hit)
+    this.noseColor = 'green';
+
+
+
+    return Rocket.createCommand(0.2, 0, 10);
+  }
+
   static createCommand(thrust, steering, duration) {
     return { thrust: thrust, steering: steering, duration: duration };
   }
@@ -151,7 +172,7 @@ class Rocket {
     translate(this.pos.x, this.pos.y);
     //rotatates to the angle the rocket is pointing
     rotate(this.rotation.heading());
-    fill(255, 0, 0);
+    fill(this.noseColor);
     arc(5, 0, 25, 5, PI + HALF_PI, HALF_PI);
     fill(225, 225, 225);
     triangle(-3, 8, -3, -8, 5, 0);

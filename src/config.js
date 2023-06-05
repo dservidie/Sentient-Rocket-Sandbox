@@ -19,5 +19,5 @@ const config = {
   mutationRate: 0.06,
   // In case of mutation, how much must change the gene. 1: New gene 0: No change
   mutationDeviation: 0.35,
-  debugMode: false,
+  debugMode: true,
 };
