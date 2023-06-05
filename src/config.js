@@ -5,7 +5,7 @@ const config = {
   commandDurationMin: 10, // How many FPS we let commands to execute
   commandDurationMax: 30, // How many FPS we let commands to execute
   // Rocket physics configuration
-  rocketMass: 1.7,
+  rocketMass: 0.3, // 1.7
   rocketThrust: 0.07,
   rocketManeuverability: 0.08, // In radians per frame
   rocketDragMin: 0.001, // Drag traveling at cero degrees

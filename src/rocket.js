@@ -4,13 +4,14 @@ class Rocket {
 
   constructor(...args) {
     let dna = args[0];
- 
+    this.sensors = args[1] || [];
+    this.addSensor({ angle: 0 });
     this.noseColor = 'red';
 
     // Physics of rocket at current instance
     this.tiltAcc = 0; // Rotation aceleration
     this.rotation = p5.Vector.fromAngle(-radians(90));
-    this.pos = createVector(width / 2, height - 15);
+    this.pos = createVector(width / 2, height - 255);
     this.vel = createVector(0, 0);
     this.acc = createVector(0, 0);
     this.maneuver = Rocket.createCommand(0.0, 0.0, 1);
@@ -130,20 +131,31 @@ class Rocket {
     // let nextCommand = this.dna.genes[this.command];
     // this.command++;
     // return nextCommand;
-    return Rocket.createCommand(0.2, 0, 10);
+    return Rocket.createCommand(0.35, 0.4, 100000);
   }
 
+  addSensor(sensor) {
+    this.sensors.push(sensor);
+  }
 
   getSensorsOutput() {
-
     line(mouseX, mouseY, 350, 50);
 
-    let hit = collideLineRect(mouseX, mouseY, 350, 50, 200, 300, 100, 150, true);
-   
-    if(hit)
-    this.noseColor = 'green';
-
-
+    let hit = collideLineRect(
+      mouseX,
+      mouseY,
+      350,
+      50,
+      200,
+      300,
+      100,
+      150,
+      false
+    );
+    this.debug +=
+      'Hit> ' + hit + '<br/>' + '' + mouseX + '/' + mouseY + '<br/>';
+    if (hit) this.noseColor = 'red';
+    else this.noseColor = 'green';
 
     return Rocket.createCommand(0.2, 0, 10);
   }
@@ -196,7 +208,7 @@ class Rocket {
     }
     pop();
     if (config.debugMode) {
-      Stage.drawArrow(this.vel, this.pos, 'green', 25);
+      Stage.drawArrow(this.vel, this.pos, this.noseColor, 25);
     }
   }
 }
