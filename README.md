@@ -4,7 +4,7 @@ Improoved version of SmartRockets. Adding sensors to the rocket to make them abl
 
 ## Description
 
-Rockets dont use a fixed set of commands anymore. Instead thery will use a command lambda sets of functions that will be stored in its DNA array and control its behavior. The most successful rockets will be able to pass its genes to the next generation of rockets. A mutation in some genes, gives opportunities to improve performance, and in that case, pass those genes.
+Rockets dont use a fixed set of commands anymore. Instead they will use a command lambda sets of functions that will be stored in its DNA array and control its behavior. The most successful rockets will be able to pass its genes to the next generation of rockets. A mutation in some genes, gives opportunities to improve performance, and in that case, pass those genes.
 
 ## Rocket controls
 

@@ -2,8 +2,8 @@ const config = {
   popSize: 25,
   // Each rocket will last commandsAmount commands
   commandsAmount: 90,
-  commandDurationMin: 10, // How many FPS we let commands to execute
-  commandDurationMax: 30, // How many FPS we let commands to execute
+  commandDurationMin: 10, // How many Frames we let commands to execute
+  commandDurationMax: 30, // How many Frames we let commands to execute
   // Rocket physics configuration
   rocketMass: 0.3, // 1.7
   rocketThrust: 0.07,
@@ -16,8 +16,8 @@ const config = {
   score_ClosestTargetDistance: 15,
   score_FinalTargetDistance: 7,
   // Sets how likely are one gene to mutate. 0: No mutation at all / 1: Mutate all genes.
-  mutationRate: 0.06,
+  mutationRate: 0.1,
   // In case of mutation, how much must change the gene. 1: New gene 0: No change
   mutationDeviation: 0.35,
   debugMode: true,
-};
+}
