@@ -10,8 +10,6 @@ class Population {
     Population.rockets = []
     // Amount of rockets
     Population.popSize = config.popSize
-    // Amount parent rocket partners
-    Population.bestRockets = []
 
     // Associates a rocket to an array index
     for (var i = 0; i < Population.popSize; i++) {
@@ -52,7 +50,6 @@ class Population {
 
     if (config.debugMode) {
       console.log('#######################################')
-      console.log('###                                 ###')
       console.log('fuelUsed: ', minFuelUsed, ' / ', maxFuelUsed)
       console.log('distanceTraveled: ', minDistanceTraveled, ' / ', maxDistanceTraveled)
       console.log(
@@ -70,7 +67,7 @@ class Population {
       console.log('#######################################')
     }
     // Calculates fitness
-    for (var r of Population.rockets) {
+    for (let r of Population.rockets) {
       let fuelUsedScore =
         map(r.fuelUsed, minFuelUsed, maxFuelUsed, 0, 1) * config.score_FuelUsed
       let distanceTraveledScore =
@@ -118,30 +115,27 @@ class Population {
         console.log('# FITNESS: ', r.fitness)
       }
     }
+    console.log('### Population.rockets', Population.rockets)
 
     // Normalizing the fitness value.
-    const maxFitness = Population.rockets.reduce((p, c) =>
-      p.fitness > c.fitness ? p.fitness : c.fitness
-    )
+    const maxFitness = Math.max(...Population.rockets.map((r) => r.fitness))
     Population.rockets.forEach((r) => (r.fitness /= maxFitness))
+    Population.rockets.sort((a, b) => b.fitness - a.fitness)
 
-    Population.bestRockets = []
+    console.log(
+      '#### ROCKETS fitness: ',
+      Population.rockets.map((r) => r.fitness)
+    )
+
     // Take rockets fitness make in to scale of 10 to 100
     // A rocket with high fitness will be most likely in the mating pool
-    let maxChances = 200
-    let minChances = 10
-    for (var r of Population.rockets) {
-      var n = map(r.fitness, 0, 1, minChances, maxChances)
-      for (var j = 0; j < n; j++) {
-        Population.bestRockets.push(r)
-      }
-    }
-
-    console.log('Population.bestRockets', Population.bestRockets)
+    const bestRockets = Population.rockets.slice(0, Math.ceil(Population.popSize * 0.2))
+    console.log('bestRockets', bestRockets)
+    // console.log('bestRockets', bestRockets)
     let newRockets = []
     Rocket.launchSequenceCounter = 0 // Just for graphical look.
     for (var i = 0; i < Population.popSize; i++) {
-      var baseRocket = random(Population.bestRockets)
+      var baseRocket = random(bestRockets)
       var childNN = baseRocket.neuralNetwork.copy()
       childNN.mutate(config.mutationRate) // * (1-(baseRocket.fitness))
       // Creates new rocket with child Neural Network
@@ -156,19 +150,19 @@ class Population {
   }
 
   // Calls for update and show functions
-  static run() {
+  static run(mustDraw) {
     for (var r of Population.rockets) {
       if (framesCounter / 5 > r.launchSequence) {
         r.update()
         // Displays rockets to screen
-        r.draw()
+        if (mustDraw) r.draw()
       }
     }
   }
 
   // Checks if all misiles are crashed
   static simulationFinished() {
-    if (framesCounter > 200) {
+    if (framesCounter > config.timeoutFrames) {
       for (let r of Population.rockets) {
         r.flying = false
       }

@@ -25,15 +25,12 @@ function setup() {
   createUI()
 }
 
-function draw() {
-  background(0)
-  Population.run()
+var drawing = true
 
-  // if (framesCounter / 5 > rocket.launchSequence) {
-  //   rocket.update()
-  //   // Displays rockets to screen
-  //   rocket.draw()
-  // }
+function draw() {
+  // drawing = skipFrames(15)
+  if (drawing) background(0)
+  Population.run(drawing)
 
   let simulationFinished = Population.simulationFinished()
   // Displays count to window
@@ -52,7 +49,7 @@ function draw() {
   framesCounter++
 
   // Renders barrier for rockets
-  Stage.draw()
+  Stage.draw(drawing)
 
   if (simulationFinished && !paused) {
     paused = true
@@ -87,7 +84,6 @@ function createUI() {
   // Configurations: These resets the simulation
   createSliderUI('popSize', createSlider(5, 50, config.popSize, 1), 'controls', (c) => {
     config.popSize = c.target.value
-    resetSimulation()
   })
   createSliderUI(
     'commandsAmount',
@@ -214,5 +210,5 @@ function setBubble(range, bubble) {
 }
 
 function skipFrames(frames) {
-  return framesCounter % frames == 0
+  return framesCounter % frames === 0
 }

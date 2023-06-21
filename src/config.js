@@ -1,5 +1,6 @@
 const config = {
   popSize: 25,
+  timeoutFrames: 500,
   // Each rocket will last commandsAmount commands
   commandsAmount: 90,
   commandDurationMin: 10, // How many Frames we let commands to execute
@@ -19,5 +20,5 @@ const config = {
   mutationRate: 0.1,
   // In case of mutation, how much must change the gene. 1: New gene 0: No change
   mutationDeviation: 0.35,
-  debugMode: true,
+  debugMode: false,
 }

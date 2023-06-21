@@ -27,7 +27,7 @@ class Rocket {
     // Performance counters
     this.fuelUsed = 0
     this.distanceTraveled = 0
-    this.closestTargetDistance = Number.MAX_VALUE - 1
+    this.closestTargetDistance = Number.MAX_VALUE / 2
     this.finalTargetDistance = 10000000000
     this.fitness = 0
     // Gives a neural network
@@ -35,7 +35,7 @@ class Rocket {
       this.neuralNetwork = neuralNetwork
     } else {
       const inputsCount = this.sensors.length + 3
-      this.neuralNetwork = new NeuralNetwork(inputsCount, 8, 2)
+      this.neuralNetwork = new NeuralNetwork(inputsCount, 100, 2)
 
       /*
         Choosing Hidden Layers
@@ -51,7 +51,7 @@ class Rocket {
 
         The number of hidden neurons should be between the size of the input layer and the output layer.
         The most appropriate number of hidden neurons is
-          sqrt(input layer nodes * output layer nodes)
+          sqrt(input nodes * output nodes)
 
         The number of hidden neurons should keep on decreasing in subsequent layers to get more and more close to pattern and feature extraction and to identify the target class.
         These above algorithms are only a general use case and they can be molded according to use case. Sometimes the number of nodes in hidden layers can increase also in subsequent layers and the number of hidden layers can also be more than the ideal case.
@@ -115,26 +115,6 @@ class Rocket {
       thrust.div(config.rocketMass)
       this.acc.add(thrust)
 
-      if (config.debugMode) {
-        /*  this.debug +=
-          'maneuver: { steering: ' +
-          this.maneuver.steering +
-          ', thrust: ' +
-          this.maneuver.thrust +
-          ' } <br/>' +
-          'this.tiltAcc: ' +
-          this.tiltAcc +
-          ' <br/>' +
-          'this.acc: ' +
-          this.debugV(this.acc) +
-          ' <br/>' +
-          'thrust: ' +
-          this.debugV(thrust) +
-          ' <br/>';
-        logP.html(this.debug);
-        this.debug = '';*/
-      }
-
       // Applies the acceleration
       this.vel.add(this.acc)
 
@@ -158,39 +138,38 @@ class Rocket {
 
   getCommand() {
     const sensing = this.sensors.map((s) => s.detection)
-    // if (sensing[0] || sensing[1]) {
+    // if (sensing[0] || sensing[1])
     //   return Rocket.createCommand(0.05, 0.9, 1);
-    // }
-    // if (sensing[1]) {
+    // if (sensing[1])
     //   return Rocket.createCommand(0.05, -0.9, 1);
-    // }
-    // if (sensing[2]) {
+    // if (sensing[2])
     //   return Rocket.createCommand(0.05, -0.9, 1);
-    // }
     // let nextCommand = this.dna.genes[this.command];
     // this.command++;
     // return nextCommand;
 
     let inputs = []
     //inputs[0] = 1
-    inputs.push(this.vel.x / 10)
-    inputs.push(this.vel.y / 10)
+    inputs.push(this.vel.x / 2)
+    inputs.push(this.vel.y / 2)
     inputs.push(this.tiltAcc)
     this.sensors.forEach((sensor) => {
-      inputs.push(sensor.detection)
+      inputs.push(sensor.detection ? 1 : 0)
     })
+
     //inputs.push(this.acc)
     // inputs[3] = closest.x / width;
     // inputs[4] = this.velocity / 10;
     let output = this.neuralNetwork.predict(inputs)
     // console.log('output', output)
     const [thrust, steering] = output
+    // console.log('inputs: ', inputs, '/ output: ', output)
     // //if (output[0] > output[1] && this.velocity >= 0) {
     // if (output[0] > output[1]) {
     //   // this.up();
     // }
 
-    return Rocket.createCommand(thrust, steering, 1)
+    return Rocket.createCommand(thrust, steering, 10)
   }
 
   addSensor(sensor) {
@@ -223,10 +202,14 @@ class Rocket {
   draw() {
     push()
     noStroke()
-    //translate to the postion of rocket
+    // translate to the position of rocket
     translate(this.pos.x, this.pos.y)
-    //rotatates to the angle the rocket is pointing
+    // rotates to the angle the rocket is pointing
     rotate(this.rotation.heading())
+
+    noSmooth()
+    triangle(-3, 5, -3, -5, 15, 0)
+
     fill(this.noseColor)
     arc(5, 0, 25, 5, PI + HALF_PI, HALF_PI)
     fill(225, 225, 225)
@@ -234,7 +217,7 @@ class Rocket {
     rectMode(CENTER)
     rect(0, 0, 10, 5)
     if (this.maneuver.thrust > 0 && this.flying) {
-      // Draw exaust flame
+      // Draw exhaust flame
       noSmooth()
       fill(255, 240, 0)
       quad(
@@ -251,7 +234,7 @@ class Rocket {
     }
     pop()
     if (config.debugMode) {
-      //   Stage.drawArrow(this.vel, this.pos, this.noseColor, 25);
+      // Stage.drawArrow(this.vel, this.pos, this.noseColor, 25);
       this.sensors.forEach((s) => {
         s.draw()
       })
