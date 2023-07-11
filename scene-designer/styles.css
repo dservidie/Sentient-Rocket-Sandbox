@@ -1,0 +1,48 @@
+body {
+  color: white;  
+  font-family: "Lucida Console", Monaco, monospace;
+	font-size: 75%;
+	background: #111;
+}
+
+div, span {
+	background: #111;
+	vertical-align: top;
+	line-height: 0.8;
+}
+h1,h2,h3,h4 {
+		margin-left: -10px;
+		margin-top: 20px;
+}
+#container {
+  width: 100%;
+}
+
+#canvasDiv {
+  width: 620px;
+  float: left;
+}
+
+#outDiv {
+  margin-left: 620px;
+  padding: 10px;
+}
+
+.fifty {
+	width: 45%;
+	display: inline-block;
+	vertical-align: top;
+}
+
+.range-wrap {
+  position: relative;
+	margin-bottom: 25px;
+}
+.bubble {
+  color: white;
+  padding: 4px 4px 2px 4px;
+  position: absolute;
+  border-radius: 4px;
+	border: 1px solid #FFF;
+  top: 20px;
+}

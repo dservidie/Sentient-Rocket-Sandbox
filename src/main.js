@@ -6,6 +6,9 @@ var generationP, lifeP, statusP, logP
 var framesCounter = 0,
   generationCounter = 1
 
+var drawing = true
+var simplifyDrawing = false
+
 function setup() {
   console.log('SETUP START')
   let canvas = createCanvas(500, 600)
@@ -16,18 +19,21 @@ function setup() {
   Stage.initialize()
 
   // TODO: Add support for Align options Ej: { ry: 140, hAlign: 'right' }
-  Stage.addBarrier({ rx: 0, ry: 140, rw: 110, rh: 12 })
-  Stage.addBarrier({ rx: 390, ry: 140, rw: 110, rh: 12 })
-  Stage.addBarrier({ rx: 175, ry: 250, rw: 150, rh: 12 })
-  Stage.addBarrier({ rx: 0, ry: 360, rw: 110, rh: 12 })
-  Stage.addBarrier({ rx: 390, ry: 360, rw: 110, rh: 12 })
+  Stage.addBarrier({ ry: 90, rx: 175, rw: 150, rh: 50 })
+
+  Stage.addBarrier({ ry: 200, rx: 0, rw: 110, rh: 50 })
+  Stage.addBarrier({ ry: 200, rx: 390, rw: 110, rh: 50 })
+
+  Stage.addBarrier({ ry: 330, rx: 175, rw: 150, rh: 50 })
+
+  Stage.addBarrier({ ry: 450, rx: 0, rw: 210, rh: 150 })
+  Stage.addBarrier({ ry: 450, rx: 290, rw: 210, rh: 150 })
 
   createUI()
 }
 
-var drawing = true
-
 function draw() {
+  if (paused) return
   // drawing = skipFrames(15)
   if (drawing) background(0)
   Population.run(drawing)
@@ -36,7 +42,8 @@ function draw() {
   // Displays count to window
   if (skipFrames(15)) {
     generationP.html('Generation #' + generationCounter)
-    lifeP.html('Frame: ' + framesCounter)
+    lifeP.html('Frame: ' + framesCounter + ' - ' + frameRate())
+
     // statusP.html(
     //   'Success: &emsp; Failed: ' +
     //     '<br/><br/>&emsp;&emsp;' +
@@ -53,13 +60,21 @@ function draw() {
 
   if (simulationFinished && !paused) {
     paused = true
-    // gives some time for human read
+    // gives some time for human read outputs
     setTimeout(() => {
       Population.evaluate()
       framesCounter = 0
       generationCounter++
       paused = false
     }, 1500)
+  }
+}
+
+function mouseClicked() {
+  if (paused) {
+    paused = false
+  } else {
+    paused = true
   }
 }
 
@@ -82,7 +97,7 @@ function createUI() {
   logP.parent('display')
 
   // Configurations: These resets the simulation
-  createSliderUI('popSize', createSlider(5, 50, config.popSize, 1), 'controls', (c) => {
+  createSliderUI('popSize', createSlider(10, 100, config.popSize, 1), 'controls', (c) => {
     config.popSize = c.target.value
   })
   createSliderUI(
@@ -174,9 +189,8 @@ function createUI() {
   configUI()
 }
 
-function createSliderUI(lable, slider, parent, onChange) {
-  //slider = createCheckbox('label', false);
-  let parentDiv = createDiv(lable)
+function createSliderUI(label, slider, parent, onChange) {
+  let parentDiv = createDiv(label)
   parentDiv.parent(parent)
   let containerDiv = createDiv('')
   containerDiv.parent(parentDiv)

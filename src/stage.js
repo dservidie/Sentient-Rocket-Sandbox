@@ -8,6 +8,8 @@ class Stage {
   }
 
   static addBarrier(barrier) {
+    // Need a id of the object to keep track of rockets encounters
+    barrier.id = Stage.objects.length
     Stage.objects.push(barrier)
   }
 
