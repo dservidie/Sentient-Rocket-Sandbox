@@ -8,8 +8,6 @@ class Stage {
   }
 
   static addBarrier(barrier) {
-    // Need a id of the object to keep track of rockets encounters
-    barrier.id = Stage.objects.length
     Stage.objects.push(barrier)
   }
 
@@ -24,14 +22,8 @@ class Stage {
       return true
     }
     // Rocket hits one object
-    for (let obj of this.objects) {
-      if (
-        rocket.pos.x > obj.rx &&
-        rocket.pos.x < obj.rx + obj.rw &&
-        rocket.pos.y > obj.ry &&
-        rocket.pos.y < obj.ry + obj.rh
-      )
-        return true
+    for (let obj of Stage.objects) {
+      if (obj.isCollidingWithPoint(rocket.pos.x, rocket.pos.y)) return true
     }
     return false
   }
@@ -39,10 +31,10 @@ class Stage {
   static draw(mustDraw) {
     if (mustDraw) {
       for (let obj of this.objects) {
-        fill(255)
-        rect(obj.rx, obj.ry, obj.rw, obj.rh)
+        obj.draw()
       }
       // Renders target
+      fill('LightGreen')
       ellipse(Stage.target.x, Stage.target.y, 16, 16)
     }
   }

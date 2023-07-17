@@ -1,4 +1,3 @@
-// Constructor function
 class Rocket {
   static launchSequenceCounter = 0
 

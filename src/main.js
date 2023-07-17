@@ -19,15 +19,12 @@ function setup() {
   Stage.initialize()
 
   // TODO: Add support for Align options Ej: { ry: 140, hAlign: 'right' }
-  Stage.addBarrier({ ry: 90, rx: 175, rw: 150, rh: 50 })
-
-  Stage.addBarrier({ ry: 200, rx: 0, rw: 110, rh: 50 })
-  Stage.addBarrier({ ry: 200, rx: 390, rw: 110, rh: 50 })
-
-  Stage.addBarrier({ ry: 330, rx: 175, rw: 150, rh: 50 })
-
-  Stage.addBarrier({ ry: 450, rx: 0, rw: 210, rh: 150 })
-  Stage.addBarrier({ ry: 450, rx: 290, rw: 210, rh: 150 })
+  Stage.addBarrier(new Barrier(90, 175, 150, 50))
+  Stage.addBarrier(new Barrier(200, 0, 110, 50))
+  Stage.addBarrier(new Barrier(200, 390, 110, 50))
+  Stage.addBarrier(new Barrier(330, 175, 150, 50))
+  Stage.addBarrier(new Barrier(450, 0, 210, 150))
+  Stage.addBarrier(new Barrier(450, 290, 210, 150))
 
   createUI()
 }

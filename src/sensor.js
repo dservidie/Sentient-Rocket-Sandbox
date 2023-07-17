@@ -1,4 +1,3 @@
-// Constructor function
 class Sensor {
   static launchSequenceCounter = 0
 
