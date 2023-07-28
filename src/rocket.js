@@ -86,12 +86,12 @@ class Rocket {
       }
       this.maneuverTimeout--
       // Rotates according to the steering of the maneuver and rocket Maneuverability
-      this.rotation.rotate(this.tiltAcc * config.rocketManeuverability)
+      this.rotation.rotate(this.tiltAcc * config.physics.rocketManeuverability)
 
       // Calculates and applies the thrust force
       let thrust = this.rotation.copy()
-      thrust.setMag(config.rocketThrust * this.maneuver.thrust)
-      thrust.div(config.rocketMass)
+      thrust.setMag(config.physics.rocketThrust * this.maneuver.thrust)
+      thrust.div(config.physics.rocketMass)
       this.acc.add(thrust)
 
       // Applies the acceleration
@@ -100,7 +100,13 @@ class Rocket {
       // Calculates and applies the drag force according to the traveling angle of the rocket
       let dragForce = this.vel.copy().normalize().mult(-1)
       let angle = abs(this.vel.angleBetween(this.rotation)) // calculates the angle between velocity and fuselage
-      let dragCoefficient = map(angle, 0, 90, config.rocketDragMin, config.rocketDragMax)
+      let dragCoefficient = map(
+        angle,
+        0,
+        90,
+        config.physics.rocketDragLowest,
+        config.physics.rocketDragHighest
+      )
       dragForce.setMag(dragCoefficient * this.vel.magSq())
       this.vel.add(dragForce)
       // Set the position accordingly to the velocity

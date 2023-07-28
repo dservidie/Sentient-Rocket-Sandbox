@@ -1,10 +1,40 @@
 class Stage {
+  static name
   static target
   static objects
 
   static initialize() {
     Stage.target = createVector(width / 2, 50)
     Stage.objects = []
+  }
+
+  static loadByName(sceneName) {
+    let sceneStorageName = 'scene-' + sceneName.replace(' ', '-')
+    let sceneJson = localStorage.getItem(sceneStorageName)
+    Stage.loadJSON(sceneJson)
+  }
+
+  static loadJSON(jsonString) {
+    let json = JSON.parse(jsonString)
+    Object.assign(Stage, json)
+    console.log('Stage.name', Stage.name)
+    Stage.target = createVector(width / 2, 50)
+    Stage.objects = json.objects.map((o) => Barrier.fromJSON(o))
+  }
+
+  static toJSON() {
+    let jsonScene = {
+      name: Stage.name,
+      objects: Stage.objects,
+    }
+    return JSON.stringify(jsonScene)
+  }
+
+  static listScenes() {
+    return Object.keys(localStorage)
+      .filter((k) => k.startsWith('scene-'))
+      .map((s) => s.replace('scene-', ''))
+      .sort()
   }
 
   static addBarrier(barrier) {

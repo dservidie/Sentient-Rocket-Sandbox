@@ -9,7 +9,7 @@ class Population {
     // Array of rockets
     Population.rockets = []
     // Amount of rockets
-    Population.popSize = config.popSize
+    Population.popSize = config.simulation.popSize
 
     // Associates a rocket to an array index
     for (var i = 0; i < Population.popSize; i++) {
@@ -181,7 +181,7 @@ class Population {
 
   // Checks if all missiles are crashed
   static simulationFinished() {
-    if (framesCounter > config.timeoutFrames) {
+    if (framesCounter > config.simulation.timeoutFrames) {
       for (let r of Population.rockets) {
         r.flying = false
       }

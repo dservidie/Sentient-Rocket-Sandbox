@@ -1,4 +1,6 @@
 var paused = false
+var scenesList
+
 var population
 // Made to display count on screen
 var generationP, lifeP, statusP, logP
@@ -40,14 +42,6 @@ function draw() {
   if (skipFrames(15)) {
     generationP.html('Generation #' + generationCounter)
     lifeP.html('Frame: ' + framesCounter + ' - ' + frameRate())
-
-    // statusP.html(
-    //   'Success: &emsp; Failed: ' +
-    //     '<br/><br/>&emsp;&emsp;' +
-    //     Population.successCounter +
-    //     ' &emsp;&emsp;&emsp;&emsp;' +
-    //     Population.failedCounter
-    // )
   }
 
   framesCounter++
@@ -81,6 +75,29 @@ function resetSimulation() {
 }
 
 function createUI() {
+  // Create the GUI
+  guiControls = createGui('Controls').setPosition(5, 5)
+  let qsControls = guiControls.getQS()
+  qsControls.addHTML(
+    'How to use',
+    'You can add barriers. Select a barrier to edit its properties. Drag and drop to move them in the stage'
+  )
+  scenesList = Stage.listScenes()
+  guiControls.addGlobals('scenesList')
+  guiControls.addComponent({
+    label: 'Load Scene',
+    callback: loadScene,
+  })
+
+  // Create physics GUI
+  sliderRange(0, Math.max(width, height), 0.0001)
+  guiPhysics = createGui('Physics (double click to expand)').setPosition(width - 200, 5)
+  guiPhysics.addObject({ ...config.physics, ...config.physicsRanges })
+
+  let qsPhysics = guiPhysics.getQS()
+  qsPhysics.saveInLocalStorage('sentient-rockets-physics')
+  qsPhysics.collapse()
+
   // Creation of controls
   generationP = createP()
   lifeP = createP()
@@ -92,134 +109,12 @@ function createUI() {
   lifeP.parent('display')
   statusP.parent('display')
   logP.parent('display')
-
-  // Configurations: These resets the simulation
-  createSliderUI('popSize', createSlider(10, 100, config.popSize, 1), 'controls', (c) => {
-    config.popSize = c.target.value
-  })
-  createSliderUI(
-    'commandsAmount',
-    createSlider(10, 50, config.commandsAmount, 5),
-    'controls',
-    (c) => {
-      config.commandsAmount = c.target.value
-      resetSimulation()
-    }
-  )
-  createSliderUI(
-    'commandDurationMin',
-    createSlider(5, 15, config.commandDurationMin, 1),
-    'controls',
-    (c) => {
-      config.commandDurationMin = c.target.value
-      resetSimulation()
-    }
-  )
-  createSliderUI(
-    'commandDurationMax',
-    createSlider(20, 40, config.commandDurationMax, 1),
-    'controls',
-    (c) => {
-      config.commandDurationMax = c.target.value
-      resetSimulation()
-    }
-  )
-  createSliderUI(
-    'mutationRate',
-    createSlider(0.01, 0.15, config.mutationRate, 0.01),
-    'controls',
-    (c) => {
-      config.mutationRate = c.target.value
-    }
-  )
-  createSliderUI(
-    'mutationDeviation',
-    createSlider(0.01, 0.4, config.mutationDeviation, 0.01),
-    'controls',
-    (c) => {
-      config.mutationDeviation = c.target.value
-    }
-  )
-
-  // Physics: Changing these dont resets the simulation, but will require rockets some generations to readapt to new values.
-  createSliderUI(
-    'rocketMass',
-    createSlider(0.5, 10.0, config.rocketMass, 0.1),
-    'physics',
-    (c) => {
-      config.rocketMass = c.target.value
-    }
-  )
-  createSliderUI(
-    'rocketThrust',
-    createSlider(0.001, 0.2, config.rocketThrust, 0.0005),
-    'physics',
-    (c) => {
-      config.rocketThrust = c.target.value
-    }
-  )
-  createSliderUI(
-    'rocketManeuverability',
-    createSlider(0.05, 0.2, config.rocketManeuverability, 0.01),
-    'physics',
-    (c) => {
-      config.rocketManeuverability = c.target.value
-    }
-  )
-  createSliderUI(
-    'rocketDragMin',
-    createSlider(0.0001, 0.1, config.rocketDragMin, 0.0005),
-    'physics',
-    (c) => {
-      config.rocketDragMin = c.target.value
-    }
-  )
-  createSliderUI(
-    'rocketDragMax',
-    createSlider(0.2, 5.0, config.rocketDragMax, 0.01),
-    'physics',
-    (c) => {
-      config.rocketDragMax = c.target.value
-    }
-  )
-
-  configUI()
 }
 
-function createSliderUI(label, slider, parent, onChange) {
-  let parentDiv = createDiv(label)
-  parentDiv.parent(parent)
-  let containerDiv = createDiv('')
-  containerDiv.parent(parentDiv)
-  containerDiv.class('range-wrap')
-  slider.parent(containerDiv)
-  slider.class('range')
-  slider.changed(onChange)
-  let output = createElement('output')
-  output.parent(containerDiv)
-  output.class('bubble')
+function loadScene() {
+  let sceneName = scenesList
+  Stage.loadByName(sceneName)
 }
-
-function configUI() {
-  const allRanges = document.querySelectorAll('.range-wrap')
-  allRanges.forEach((wrap) => {
-    const range = wrap.querySelector('.range')
-    const bubble = wrap.querySelector('.bubble')
-    range.addEventListener('input', () => {
-      setBubble(range, bubble)
-    })
-    setBubble(range, bubble)
-  })
-}
-function setBubble(range, bubble) {
-  const val = range.value
-  const min = range.min ? range.min : 0
-  const max = range.max ? range.max : 100
-  const newVal = Number(((val - min) * 100) / (max - min))
-  bubble.innerHTML = val
-  bubble.style.left = `${newVal * 1.1}px`
-}
-
 function skipFrames(frames) {
   return framesCounter % frames === 0
 }

@@ -40,4 +40,9 @@ class Barrier {
     fill(this.color)
     rect(this.rx, this.ry, this.rw, this.rh)
   }
+
+  // Constructor function to create a new Person object from a JSON string.
+  static fromJSON(json) {
+    return Object.assign(new Barrier(), json)
+  }
 }
