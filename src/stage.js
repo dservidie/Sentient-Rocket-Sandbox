@@ -11,6 +11,7 @@ class Stage {
   static loadByName(sceneName) {
     let sceneStorageName = 'scene-' + sceneName.replace(' ', '-')
     let sceneJson = localStorage.getItem(sceneStorageName)
+    Stage.name = sceneName
     Stage.loadJSON(sceneJson)
   }
 
@@ -27,7 +28,7 @@ class Stage {
       name: Stage.name,
       objects: Stage.objects,
     }
-    return JSON.stringify(jsonScene)
+    return JSON.stringify(jsonScene, null, 2)
   }
 
   static listScenes() {

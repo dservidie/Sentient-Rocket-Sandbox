@@ -1,5 +1,9 @@
 var paused = false
-var scenesList
+
+// Stage Panel
+var guiStage, scenesList
+// Rockets Panel
+var guiRockets, currentNeuralNetworks
 
 var population
 // Made to display count on screen
@@ -51,21 +55,22 @@ function draw() {
 
   if (simulationFinished && !paused) {
     paused = true
-    // gives some time for human read outputs
-    setTimeout(() => {
-      Population.evaluate()
+
+    Population.evaluate().then(() => {
       framesCounter = 0
       generationCounter++
       paused = false
-    }, 1500)
+    })
   }
 }
 
 function mouseClicked() {
-  if (paused) {
-    paused = false
-  } else {
-    paused = true
+  if (e.target.tagName === 'CANVAS') {
+    if (paused) {
+      paused = false
+    } else {
+      paused = true
+    }
   }
 }
 
@@ -76,17 +81,30 @@ function resetSimulation() {
 
 function createUI() {
   // Create the GUI
-  guiControls = createGui('Controls').setPosition(5, 5)
-  let qsControls = guiControls.getQS()
+  guiStage = createGui('Stage').setPosition(5, 5)
+  let qsControls = guiStage.getQS()
   qsControls.addHTML(
     'How to use',
-    'You can add barriers. Select a barrier to edit its properties. Drag and drop to move them in the stage'
+    'You can change the scene at any time to see the behavior of the rockets in a different env.'
   )
   scenesList = Stage.listScenes()
-  guiControls.addGlobals('scenesList')
-  guiControls.addComponent({
+  guiStage.addGlobals('scenesList')
+  guiStage.addComponent({
     label: 'Load Scene',
     callback: loadScene,
+  })
+
+  guiRockets = createGui('Rockets').setPosition(210, 5)
+  let qsRockets = guiRockets.getQS()
+  qsRockets.addHTML(
+    'Rockets and Neural Networks',
+    'Save or load neural networks trained to test their performance.'
+  )
+  currentNeuralNetworks = Stage.listScenes()
+  guiRockets.addGlobals('currentNeuralNetworks')
+  guiRockets.addComponent({
+    label: 'Execute Action',
+    callback: executeAction,
   })
 
   // Create physics GUI
@@ -118,3 +136,4 @@ function loadScene() {
 function skipFrames(frames) {
   return framesCounter % frames === 0
 }
+function executeAction(frames) {}

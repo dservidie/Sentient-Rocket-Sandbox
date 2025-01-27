@@ -17,7 +17,7 @@ class Population {
     }
   }
 
-  static evaluate() {
+  static async evaluate() {
     // Calculates the performance of the generation to normalize the fitness.
     let maxFuelUsed = 0
     let minFuelUsed = Number.MAX_VALUE / 2
@@ -157,13 +157,11 @@ class Population {
       var baseRocket = random(bestRockets)
       var childNN = baseRocket.neuralNetwork.copy()
       childNN.mutate(config.mutationRate) // * (1-(baseRocket.fitness))
-      // Creates new rocket with child Neural Network
       newRockets.push(new Rocket(childNN))
     }
 
     // This instance of rockets are the new rockets
     Population.rockets = newRockets
-
     Population.successCounter = 0
     Population.failedCounter = 0
   }
@@ -201,5 +199,18 @@ class Population {
   }
   static increaseFailedCounter() {
     Population.failedCounter++
+  }
+
+  static async saveModels(modelName) {
+    await childNN.saveModel('test-01')
+  }
+
+  static async loadModels(modelName) {
+    //  const rebuiltChildNN = await NeuralNetwork.loadModel(
+    //    'test-01',
+    //    childNN.input_nodes,
+    //    childNN.hidden_nodes,
+    //    childNN.output_nodes
+    //  )
   }
 }

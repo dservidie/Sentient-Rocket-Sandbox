@@ -82,11 +82,13 @@ class NeuralNetwork {
     return model
   }
 
-  saveModel(name) {
-    localStorage.setItem(`${name}_model`, 1)
+  async saveModel(name) {
+    await this.model.save(`localstorage://model-${name}`)
   }
 
-  loadModel(name) {
-    const model = localStorage.getItem(`${name}_model`)
+  static async loadModel(name, inputNodes, hiddenNodes, outputNodes) {
+    const model = await tf.loadLayersModel(`localstorage://model-${name}`)
+    console.log('loadModel/model: ', model)
+    return new NeuralNetwork(model, inputNodes, hiddenNodes, outputNodes)
   }
 }

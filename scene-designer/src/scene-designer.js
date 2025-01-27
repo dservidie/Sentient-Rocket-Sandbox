@@ -21,7 +21,7 @@ let logP
 
 function setup() {
   console.log('SETUP START')
-  let canvas = createCanvas(500, 600)
+  let CANVAs = createCanvas(500, 600)
   canvas.parent('canvasDiv')
 
   Stage.initialize()
@@ -183,8 +183,9 @@ function executeAction() {
       break
 
     case 'Download selected Scene':
-      let sceneName3 = prompt('Name the new scene:', '')
-
+      let sceneJson = Stage.toJSON()
+      let sceneStorageName = 'scene-' + currentSceneName.replace(' ', '-')
+      save(sceneJson, sceneStorageName + '.json', true)
       break
 
     case 'Delete Scene':
